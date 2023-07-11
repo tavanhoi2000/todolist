@@ -1,5 +1,6 @@
 import {useRef, useState, useContext} from "react";
 import {ArrayContext} from "./App";
+import Form from "./form";
 
 function ListItem() {
     const refValue = useRef()
@@ -14,14 +15,18 @@ function ListItem() {
 
     }
 
-    const handleSaveUpdate = () => {
+    const handleSaveUpdate = (ites) => {
+        const item = document.getElementsByClassName('change-value')
+        console.log(item.target.value)
         setEdit(false)
         setValueInput('')
     }
 
-    const handleDelete = () => {
-        console.log(1)
+    function handleDelete(e) {
+        const newTodos = Array[0].filter((item, i) => i !== e)
+        Array[1](newTodos)
     }
+
     return (
         <div className="panel panel-success">
             <div className="panel-heading">List Item</div>
@@ -37,19 +42,18 @@ function ListItem() {
                 <tbody>
 
                 {
-                    Array[0].map((item, index) => {
+                    Array[0] && Array[0].map((item, index) => {
+                        // console.log(item)
                         return (
                             <tr key={index}>
                                 <td className="text-center">{index + 1}</td>
-                                <td>{item}</td>
+                                <td className='change-value'>{item}</td>
                                 <td className="text-center"><span className="label label-danger">High</span></td>
                                 <td>
-                                    <button type="button" onClick={handleUpdate}
+                                    <button type="button" onClick={(e) => handleUpdate(item)}
                                             className="btn btn-warning btn-sm">Edit
                                     </button>
-                                    <button type="button" onClick={(e, ind) => {
-                                        console.log(item.index)
-                                    }}
+                                    <button type="button" onClick={() => handleDelete(index)}
                                             className="btn btn-danger btn-sm">Delete
                                     </button>
                                 </td>
@@ -64,11 +68,7 @@ function ListItem() {
                                    ref={refValue} value={newValueInput} onChange={(e) => setValueInput(e.target.value)}/>
                         </td>
                         <td className="text-center">
-                            <select className="form-control">
-                                <option>Small</option>
-                                <option>Medium</option>
-                                <option>High</option>
-                            </select>
+                            <Form/>
                         </td>
                         <td>
                             <button type="button" className="btn btn-default btn-sm">Cancel</button>

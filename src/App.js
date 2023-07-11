@@ -27,14 +27,11 @@ function App() {
                 <Sort />
               </div>
               <div className="col-xs-5 col-sm-5 col-md-5 col-lg-5 marginB10">
-                {/*<button type="button" className="btn btn-info btn-block marginB10">Add Item</button>*/}
+
                 <AddItem listItem={listItem} setListItem={setListItem}/>
               </div>
             </div>
-            {/*<div className="row marginB10">*/}
-            {/*  <div className="col-md-offset-7 col-md-5">*/}
-            {/*  </div>*/}
-            {/*</div>*/}
+
 
             <ListItem />
           </div>

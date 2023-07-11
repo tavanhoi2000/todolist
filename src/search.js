@@ -3,12 +3,17 @@ import {ArrayContext} from "./App";
 
 function Search() {
     const Array = useContext(ArrayContext)
-
     const [searchInput, setSearchInput] = useState('')
 
-    const searchName = () => {
-        const arrayFilter = Array[0].filter(name => name == searchInput)
+
+    const searchName = () =>{
+
+      const arrayFilter = Array[0].filter(name => name === searchInput)
+
         console.log(arrayFilter)
+
+       return arrayFilter.length > 0 ? Array[1](arrayFilter) : Array[0]
+
     }
 
     return (
@@ -18,11 +23,6 @@ function Search() {
                 <button onClick={searchName} className="btn btn-info" type="button">Search</button>
             </span>
 
-            <ul>
-                {
-
-                }
-            </ul>
         </div>
     )
 }
