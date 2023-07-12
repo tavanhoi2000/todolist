@@ -1,31 +1,42 @@
 import {useRef, useState, useContext} from "react";
-import {ArrayContext} from "./App";
-import Form from "./form";
+import {ParentsData} from "./App";
+import axios from "axios";
+
 
 function ListItem() {
-    const refValue = useRef()
-    const Array = useContext(ArrayContext)
+    const childrenData = useContext(ParentsData)
+    const refValue = useRef(null)
     const [isEdit, setEdit] = useState(false)
+    const [newValue, setValue] = useState('')
+    const [itemId, setItemId] = useState(null)
+    const url = 'https://jsonplaceholder.typicode.com/users/'
 
-    const [newValueInput, setValueInput] = useState('')
-    const handleUpdate = async (e) => {
+
+    // const [newValueInput, setValueInput] = useState('')
+    const handleUpdate = async (item,id) => {
+        setItemId(id)
         await setEdit(true)
-        refValue.current.focus()
-        // refValue.current.value= ''
+    }
+
+    async function handleDelete(id) {
+
+        const newData = await axios.delete(url + id)
+        const newTodos = childrenData[0].filter((item) =>{
+            return item.id !== id
+        } )
+        childrenData[1](newTodos)
 
     }
 
-    const handleSaveUpdate = (ites) => {
-        const item = document.getElementsByClassName('change-value')
-        console.log(item.target.value)
+    const handleSaveUpdate = async (id, item) => {
+        const res = await axios.put(url + id, {name: newValue})
+            item.name = res.data.name
+        setValue('')
         setEdit(false)
-        setValueInput('')
+
     }
 
-    function handleDelete(e) {
-        const newTodos = Array[0].filter((item, i) => i !== e)
-        Array[1](newTodos)
-    }
+
 
     return (
         <div className="panel panel-success">
@@ -42,41 +53,38 @@ function ListItem() {
                 <tbody>
 
                 {
-                    Array[0] && Array[0].map((item, index) => {
-                        // console.log(item)
+                    childrenData[0] && childrenData[0].map((item, index) => {
                         return (
                             <tr key={index}>
                                 <td className="text-center">{index + 1}</td>
-                                <td className='change-value'>{item}</td>
+                                { isEdit ?
+                                    <td>
+
+                                        {
+                                            itemId == item.id ? <input type="text" className="form-control" placeholder='Write new name you want updadte'
+                                                                       ref={refValue} value={newValue} onChange={(e) => setValue(e.target.value)}/> : item.name
+                                        }
+                                    </td>
+                                    : <td className='change-value'>{item.name}</td>
+                                }
                                 <td className="text-center"><span className="label label-danger">High</span></td>
                                 <td>
-                                    <button type="button" onClick={(e) => handleUpdate(item)}
+                                    <button type="button" onClick={(e) => handleUpdate(item,item.id)}
                                             className="btn btn-warning btn-sm">Edit
                                     </button>
-                                    <button type="button" onClick={() => handleDelete(index)}
+                                    <button type="button" onClick={() => handleDelete(item.id)}
                                             className="btn btn-danger btn-sm">Delete
                                     </button>
+                                    {
+                                        isEdit && itemId == item.id ? <button type="button" onClick={() => handleSaveUpdate(item.id, item)} className="btn btn-success btn-sm">Save
+                                        </button> : ''
+                                    }
                                 </td>
                             </tr>
                         )
                     })
                 }
-                {
-                    isEdit && <tr>
-                        <td className="text-center">change</td>
-                        <td><input type="text" className="form-control" placeholder='Write new name you want updadte'
-                                   ref={refValue} value={newValueInput} onChange={(e) => setValueInput(e.target.value)}/>
-                        </td>
-                        <td className="text-center">
-                            <Form/>
-                        </td>
-                        <td>
-                            <button type="button" className="btn btn-default btn-sm">Cancel</button>
-                            <button type="button" onClick={handleSaveUpdate} className="btn btn-success btn-sm">Save
-                            </button>
-                        </td>
-                    </tr>
-                }
+
                 </tbody>
             </table>
         </div>
