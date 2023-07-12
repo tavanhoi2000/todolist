@@ -2,19 +2,31 @@ import './App.css';
 import Title from "./title";
 import ListItem from "./listItem";
 import Search from "./search";
-import Sort from "./sort";
 import AddItem from "./addItem";
-import {useState, createContext} from "react";
+import {useState, createContext, useEffect} from "react";
+import axios from "axios";
 
-export const ArrayContext = createContext()
-
-console.log(ArrayContext)
+export const ParentsData = createContext()
 
 function App() {
   const [listItem, setListItem] = useState([])
+  const url = 'https://jsonplaceholder.typicode.com/users/'
+
+
+  useEffect( () => {
+    const getData = async () => {
+      const response = await axios.get(url)
+      const data = response.data
+      setListItem(data)
+    }
+
+    getData()
+
+    return () => false
+  },[])
 
   return (
-      <ArrayContext.Provider value={[listItem, setListItem]}>
+      <ParentsData.Provider value={[listItem, setListItem]}>
         <div className="App">
           <div className="container">
             <Title/>
@@ -24,11 +36,11 @@ function App() {
                 <Search />
               </div>
               <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                <Sort />
+
               </div>
               <div className="col-xs-5 col-sm-5 col-md-5 col-lg-5 marginB10">
 
-                <AddItem listItem={listItem} setListItem={setListItem}/>
+                <AddItem />
               </div>
             </div>
 
@@ -36,7 +48,7 @@ function App() {
             <ListItem />
           </div>
         </div>
-      </ArrayContext.Provider>
+      </ParentsData.Provider>
 
   );
 }

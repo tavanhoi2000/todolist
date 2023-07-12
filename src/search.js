@@ -1,27 +1,32 @@
 import {useState, useContext} from "react";
-import {ArrayContext} from "./App";
+import {ParentsData} from "./App";
 
 function Search() {
-    const Array = useContext(ArrayContext)
+    const childrenData = useContext(ParentsData)
     const [searchInput, setSearchInput] = useState('')
 
 
-    const searchName = () =>{
+    const handleSearchItem = (e) =>{
+        let value = e.toLowerCase()
+        let result = []
+        result = childrenData[0].filter(data => {
+            return data.name.search(value) != -1
+        })
 
-      const arrayFilter = Array[0].filter(name => name === searchInput)
+        childrenData[1](result)
+        console.log(value)
 
-        console.log(arrayFilter)
-
-       return arrayFilter.length > 0 ? Array[1](arrayFilter) : Array[0]
+      // const arrayFilter = childrenData[0].filter(name => {})
+      //
+      //   console.log(arrayFilter)
+      //
+      //  return arrayFilter.length > 0 ? childrenData[1](arrayFilter) : childrenData[0]
 
     }
 
     return (
         <div className="input-group">
-            <input type="text" className="form-control" value={searchInput} onChange={(e) => setSearchInput(e.target.value)} placeholder="Search item name"/>
-            <span className="input-group-btn">
-                <button onClick={searchName} className="btn btn-info" type="button">Search</button>
-            </span>
+            <input type="text" className="form-control" value={searchInput} onChange={(e) => handleSearchItem(e.target.value)} placeholder="Search item name"/>
 
         </div>
     )
