@@ -9,6 +9,7 @@ function AddItem() {
     const refValue = useRef()
 
     const handleSubmit = () => {
+        
         refValue.current.focus()
         setInputValue('')
         return Array[1]([...Array[0], inputValue])
