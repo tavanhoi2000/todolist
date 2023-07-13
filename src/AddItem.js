@@ -15,7 +15,7 @@ function AddItem() {
       listUser[1]([...listUser[0], newUser]);
       setError(null);
     } else {
-      setError("Không thể để trống trường này ");
+      setError("Không thể để trống trường này! ");
     }
     refValue.current.focus();
     setInputValue("");
