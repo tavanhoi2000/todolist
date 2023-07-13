@@ -32,5 +32,4 @@ function App() {
     </UsersData.Provider>
   );
 }
-
 export default App;

@@ -1,6 +1,6 @@
 import { useRef, useState, useContext, useEffect } from "react";
 import { UsersData } from "./App.js";
-import { getAllUsers, handleDelete, url, handleUpdate } from "./services.js";
+import { getAllUsers, handleDelete, handleUpdate } from "./services.js";
 
 function ListItem() {
   const listUser = useContext(UsersData);
